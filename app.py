@@ -400,6 +400,8 @@ with tab_analysis:
         st.pyplot(fig, use_container_width=True)
         plt.close(fig)
         st.markdown('<div class="note">Colour differences can arise from lighting, white balance, camera processing, pigmentation and the selected region. These figures cannot determine hemoglobin levels or whether someone has anemia.</div>', unsafe_allow_html=True)
+        
+        
 
 with tab_export:
     html_section('Quality review & exports', 'Use this section to document your processing workflow and decide whether a photograph should be retaken.')
@@ -413,6 +415,58 @@ with tab_export:
     else:
         st.success('No major issues detected by these basic image-quality heuristics.')
     st.caption('Quality thresholds are illustrative and resolution/content dependent. They are not validated clinical acceptance criteria.')
+
+    st.divider()
+    st.subheader("Health Guidance & Next Steps")
+
+    st.info(
+        "HemoVision analyses visible colour characteristics of the eye. "
+        "It cannot diagnose anemia, estimate haemoglobin levels, "
+        "or determine whether medical attention is necessary."
+    )
+
+    symptom_options = [
+        "I am only exploring the image analysis",
+        "I have persistent fatigue, dizziness, or unusual breathlessness",
+        "I have chest pain, fainting, or severe difficulty breathing",
+    ]
+
+    symptom_choice = st.radio(
+        "Select your situation:",
+        symptom_options,
+        key="health_guidance_selection"
+    )
+
+    if symptom_choice == symptom_options[0]:
+        st.info(
+            "Your image analysis is complete. The colour measurements "
+            "do not establish whether you have anemia. "
+            "If you have health concerns, consult a healthcare professional."
+        )
+
+    elif symptom_choice == symptom_options[1]:
+        st.warning(
+            "Medical follow-up recommended: Arrange an appointment "
+            "with a healthcare professional to discuss your symptoms. "
+            "They may recommend a complete blood count (CBC) if appropriate. "
+            "This recommendation is based on the reported symptoms, "
+            "not on the photograph."
+        )
+
+    else:
+        st.error(
+            "Seek urgent medical attention. Chest pain, fainting, "
+            "or severe difficulty breathing may indicate a serious "
+            "medical problem. Contact local emergency services "
+            "if symptoms are severe or occurring now. "
+            "Do not rely on this image analysis."
+        )
+
+    st.caption(
+        "Educational guidance only. This is not a validated "
+        "medical screening or triage tool."
+    )
+
     st.divider()
     if metrics is None:
         st.info('Complete the polygon to enable exporting measurements and the mask.')
